@@ -78,7 +78,7 @@ e2: select envelope control
 e3: change envelope control value  
 k2/k3: delete/add envelope control point  
 ```
-note: currently, 
+note: as in the norns version of flora, the envelopes' curve settings do not have any effect on the midi sequencing. 
 
 #### Water 
 ![](images/water_wide_inv.png)
@@ -87,6 +87,7 @@ e1: next/previous page
 e2: select control  
 e3: change control value  
 ```
+note: as in the norns version of flora, the `amp` and `cf scalar` controls do not have any effect on the midi sequencing. all other controls on the
 
 #### Tinta and Tinta Envelope
 ![](images/tinta_wide_inv.png)

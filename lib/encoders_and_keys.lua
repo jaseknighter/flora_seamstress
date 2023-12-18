@@ -22,33 +22,10 @@ function enc_key_visualizer()
   screen.pixel(screen_size.x-11,7)--k2
   screen.level((encoder_activated3==true and shift_pressed==true) and (lrarrow_pressed == false and 10 or 15) or 5)
   screen.pixel(screen_size.x-6,7)--k3
- 
-  -- put visualizer in the bottom right corner
-  -- print(encoder_activated1==true and shift_pressed==false,shift_pressed,encoder_activated1,encoder_activated2,encoder_activated3)
-  -- screen.level(10)
-  -- screen.move(screen_size.x-20,screen_size.y-10)
-  -- screen.rect(20,10)
-  -- screen.level(5)
-  -- screen.level((encoder_activated1==true and shift_pressed==true) and (lrarrow_pressed == false and 10 or 15) or 5)
-  -- screen.pixel(screen_size.x-17,screen_size.y-7)--k1
-  -- screen.level((encoder_activated1==true and shift_pressed==false) and (lrarrow_pressed == false and 10 or 15) or 5)
-  -- screen.move(screen_size.x-14,screen_size.y-7)--e1
-  -- screen.circle(1)--e1
-  -- screen.level((encoder_activated2==true and shift_pressed==false) and (lrarrow_pressed == false and 10 or 15) or 5)
-  -- screen.move(screen_size.x-9,screen_size.y-5)--e2
-  -- screen.circle(1)--e2
-  -- screen.level((encoder_activated3==true and shift_pressed==false) and (lrarrow_pressed == false and 10 or 15) or 5)
-  -- screen.move(screen_size.x-4,screen_size.y-5)--e3
-  -- screen.circle(1)--e3
-  -- screen.level((encoder_activated2==true and shift_pressed==true) and (lrarrow_pressed == false and 10 or 15) or 5)
-  -- screen.pixel(screen_size.x-11,screen_size.y-3)--k2
-  -- screen.level((encoder_activated3==true and shift_pressed==true) and (lrarrow_pressed == false and 10 or 15) or 5)
-  -- screen.pixel(screen_size.x-6,screen_size.y-3)--k3
 end
 
 -- encoders and keys
 screen.key = function (char,modifiers,is_repeat,state)
-  
   if pages.index > 3 then screen_dirty=true end
   local repeat_on_is_repeat = true
   local repeat_check = true
@@ -182,6 +159,110 @@ screen.key = function (char,modifiers,is_repeat,state)
       end
     end
   end
+  if pages.index==6 and char.name==nil and state == 1 then
+    if shift_pressed then
+      t.str = t.str .. kc.shifted[char]
+    else
+      t.str = t.str .. char
+    end
+    t.redraw()
+  end
+
+  local code = char.name == nil and char or char.name
+  
+  if pages.index==6 and state == 1 then
+    if val == 0 then      
+      if string.sub(code,#code-3)  == "CTRL" then 
+        t.ctrl_down = false
+      end
+      return 
+    end
+    if code == "BACKSPACE" or code == "backspace" then
+      t.str = t.str:sub(1, -2)
+    elseif code == "UP" or code == "up" then
+      if t.ctrl_down == true then
+        t.cmds_idx = util.wrap(t.cmds_idx-1,1,#t.cmds)
+        t.str = t.cmds[t.cmds_idx][1]..t.cmds[t.cmds_idx][2]
+      else
+        if #t.history == 0 then return end
+        if t.new_line then
+          t.history_index = #t.history - 1
+          t.new_line = false
+        else
+          t.history_index = util.clamp(t.history_index - 1, 0, #t.history)
+        end
+        t.str = t.history[t.history_index + 1]
+      end
+    elseif code == "DOWN" or code == "down" then
+      if t.ctrl_down == true then
+        t.cmds_idx = util.wrap(t.cmds_idx+1,1,#t.cmds)
+        t.str = t.cmds[t.cmds_idx][1]..t.cmds[t.cmds_idx][2]
+      else
+        if #t.history == 0 or t.history_index == nil then return end
+        t.history_index = util.clamp(t.history_index + 1, 0, #t.history)
+        if t.history_index == #t.history then
+          t.str = ""
+          t.new_line = true
+        else
+          t.str = t.history[t.history_index + 1]
+        end
+      end
+    elseif (code == "ENTER" or code == "return" ) and t.cmd_ok == true and #t.str>0 then
+      table.insert(t.history, t.str)
+      t.str = ""
+      t.history_index = #t.history
+      t.new_line = true
+
+      if t.cmd == 1 then -- update octaves
+        local tbl = t.str_to_tab(t.cmd_params)
+        -- for i=1,#tbl do -- IMPORTANT: keep octaves below 3 so things don't blow up
+        --   if tbl[i] > 2 then tbl[i] = 2 end 
+        -- end
+        t.oct = s{table.unpack(tbl)}
+      elseif t.cmd == 2 then -- update tinta melody
+        local tbl = t.str_to_tab(t.cmd_params)
+        t.tin = s{table.unpack(tbl)}
+      elseif t.cmd == 3 then -- update velocities
+        local tbl = t.str_to_tab(t.cmd_params)
+        t.vel = s{table.unpack(tbl)}
+      elseif t.cmd == 4 then -- update rhythm
+        local tbl = t.str_to_tab(t.cmd_params)
+        t.set_rhythm(tbl)
+      elseif t.cmd == 5 then -- start the tinta pattern
+        params:set("tin_enabled",2)
+      elseif t.cmd == 6 then -- stop the tinta pattern
+        params:set("tin_enabled",1)
+      elseif t.cmd == 7 then -- dance on
+        params:set("tin_dancing_notes",2)
+      elseif t.cmd == 8 then -- dance off
+        params:set("tin_dancing_notes",1)
+      elseif t.cmd == 9 then -- start envelope morph
+        params:set("tin_env_morph",2)
+      elseif t.cmd == 10 then -- stop envelope morph 
+        params:set("tin_env_morph",1)
+      elseif t.cmd == 11 then -- set duration off morphing envelope in beats
+        local tbl = t.str_to_tab(t.cmd_params)
+        t.set_edu(tbl)
+      elseif t.cmd == 12 then -- set steps of to morph envelope
+        local tbl = t.str_to_tab(t.cmd_params)
+        t.set_est(tbl)
+      elseif t.cmd == 13 then -- set shape of morphing envelope
+        local tbl = t.str_to_tab(t.cmd_params)
+        t.set_esh(tbl)
+      elseif keyboard.ctrl() then
+        if t.ctrl_down == false then
+          t.ctrl_down = true
+        end
+      end
+      t.history_index = #t.history
+      -- table.remove(t.history,#t.history)
+      -- t.history_index = #t.history
+      -- t.str = ""
+    end
+    t.redraw()
+    -- grid_redraw()
+  end
+
 end
 
 

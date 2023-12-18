@@ -54,7 +54,7 @@ e1: next/previous page
 E2: select active plant
 e2: select control
 e3: select character
-E3: change letter value
+E3: change letter/number value
 k2/k3: delete/add letter
 ```
 

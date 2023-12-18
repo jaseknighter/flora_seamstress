@@ -49,7 +49,7 @@ instructions.display = function ()
       end
     else 
       screen.move(5, 44)
-      screen.text("k1 + e3: change control value")
+      screen.text("E3: change control value")
     end 
   elseif (pages.index == 3) then
     screen.text("e2: move up/down")

@@ -20,6 +20,19 @@ include "lib/includes"
 -- init
 ------------------------------
 function init()
+  -- local orig_screen_text = screen.text
+  -- function screen.text(txt)
+  --   txt = txt and txt or ""
+  --   orig_screen_text(txt)
+    
+  -- end
+  
+  -- local orig_screen_get_text_size = screen.get_text_size
+  -- function screen.get_text_size(txt)
+  --   txt = txt and txt or ""
+  --   orig_screen_get_text_size(txt)
+  -- end
+
   screen.set_size(screen_size.x,screen_size.y+5)
   pages = UI.Pages.new(1, num_pages)
   
@@ -82,6 +95,7 @@ function init()
   local pset_param_exclusions_plant = {"plant1_instructions","plant2_instructions","plant1_angle","plant2_angle"}
   
   -- plow exclusion group
+  -- local pset_param_exclusions_plow = {"num_plow1_controls","num_plow2_controls","plow1_max_level","plow1_max_time","plow2_max_level","plow2_max_time"}
   local pset_param_exclusions_plow = {"num_plow1_controls","num_plow2_controls","plow1_max_level","plow1_max_time","plow2_max_level","plow2_max_time","randomize_env_probability1","time_probability1","level_probability1","curve_probability1","time_modulation1","level_modulation1","curve_modulation1","randomize_env_probability2","time_probability2","level_probability2","curve_probability2","time_modulation2","level_modulation2","curve_modulation2"}
   
   for i=1, MAX_ENVELOPE_NODES, 1

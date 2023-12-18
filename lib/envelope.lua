@@ -410,7 +410,7 @@ function Envelope:new(id, env_nodes)
           local control_range = next_val - prev_val
           local control_value = control_range*math.random(-1,1) * time_modulation_amount/10 + current_val
           control_value = util.clamp(control_value,prev_val, next_val)
-          local controlspec = cs.new(prev_val,next_val,'lin',0,control_value,'')
+          local controlspec = cs.new(prev_val,next_val,'lin',0,control_value)
           if env_nodes[i] then
             local param = params:lookup_param(param_id_name)
             param.controlspec = controlspec

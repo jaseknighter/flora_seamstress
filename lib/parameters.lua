@@ -15,7 +15,7 @@ flora_params = {}
 
 local specs = {}
     
-specs.AMP = cs.new(0,10,'lin',0,AMPLITUDE_DEFAULT,'')
+specs.AMP = cs.new(0,10,'lin',0,AMPLITUDE_DEFAULT)
 
 specs.NOTE_SCALAR = cs.def{
                       min=0,
@@ -111,9 +111,6 @@ flora_params.add_params = function(plants)
       end
     end
   end}
-
-  -- params:hide("page_turner")
-  -- params:hide("active_plant_switcher")
 
 --------------------------------
 -- 
@@ -558,7 +555,7 @@ params:add_group("just friends",2)
       local param = params:lookup_param(param_id_name)
       local prev_val = (env_nodes[i-1] and env_nodes[i-1].time) or 0
       local next_val = env_nodes[i+1] and env_nodes[i+1].time or envelopes[plow_id].env_time_max
-      local controlspec = cs.new(prev_val,next_val,'lin',0,control_value,'')
+      local controlspec = cs.new(prev_val,next_val,'lin',0,control_value)
       if env_nodes[i] then
         param.controlspec = controlspec
         if env_nodes[i].time ~= params:get(param.id)  then 
@@ -573,7 +570,7 @@ params:add_group("just friends",2)
       local control_value = get_control_value_fn(plow_id,i) or 1
       local param = params:lookup_param(param_id_name)
       local max_val = envelopes[plow_id].env_level_max
-      local controlspec = cs.new(0,max_val,'lin',0,control_value,'')
+      local controlspec = cs.new(0,max_val,'lin',0,control_value)
       if env_nodes[i] then
         param.controlspec = controlspec
         if (i == 1 or i == #envelopes[plow_id].graph_nodes) and param:get() ~= 0 then
@@ -679,8 +676,8 @@ params:add_group("just friends",2)
     params:set(num_plow_controls,num_env_nodes)
   end
 
-  specs.PLOW_LEVEL = cs.new(0.0,MAX_AMPLITUDE,'lin',0.1,AMPLITUDE_DEFAULT,'')
-  specs.PLOW_TIME = cs.new(0.0,MAX_ENV_LENGTH,'lin',0.1,ENV_TIME_MAX,'')
+  specs.PLOW_LEVEL = cs.new(0.0,MAX_AMPLITUDE,'lin',0.1,AMPLITUDE_DEFAULT)
+  specs.PLOW_TIME = cs.new(0.0,MAX_ENV_LENGTH,'lin',0.1,ENV_TIME_MAX)
 
   local init_plow_controls = function(plow_id)
     
@@ -694,7 +691,7 @@ params:add_group("just friends",2)
     local plow_curves = plow_id == 1 and plow1_curves or plow2_curves
     
     
-    -- set the envelope's overall max level
+    -- set the   envelope's overall max level
     params:add{
       type="control",
       id = plow_id == 1 and "plow1_max_level" or "plow2_max_level",
@@ -707,7 +704,7 @@ params:add_group("just friends",2)
         end
       end
     }
-  
+    
     -- set the envelope's overall max time
     params:add{
       type="control",
@@ -721,6 +718,7 @@ params:add_group("just friends",2)
         end
       end
     }  
+
     for i=1, MAX_ENVELOPE_NODES, 1
     do
       for j=1, 3, 1
@@ -753,7 +751,7 @@ params:add_group("just friends",2)
           type = "control", 
           id = param_id_name,
           name = param_name,
-          controlspec = cs.new(min_val,max_val,'lin',0,control_value,''),
+          controlspec = cs.new(min_val,max_val,'lin',0,control_value),
           action=function(x) 
             local control_value = get_control_value_fn(plow_id,i) or 1
             local param = params:lookup_param(param_id_name)
@@ -811,13 +809,13 @@ params:add_group("just friends",2)
   end}
 
   -- switched from add_taper
-  params:add_number("randomize_env_probability1", "1: env mod probability", 0, 100, 100, 0, "%")
-  params:add_number("time_probability1", "1: time mod probability", 0, 100, 0, 0, "%")
-  params:add_number("level_probability1", "1: level mod probability", 0, 100, 0, 0, "%")
-  params:add_number("curve_probability1", "1: curve mod probability", 0, 100, 0, 0, "%")
-  params:add_number("time_modulation1", "1: time modulation", 0, params:get("plow1_max_time"), 0, 0, "")
-  params:add_number("level_modulation1", "1: level modulation", 0, params:get("plow1_max_level"), 0, 0, "")
-  params:add_number("curve_modulation1", "1: curve modulation", 0, 5, 0, 0, "")
+  params:add_number("randomize_env_probability1", "1: env mod probability", 0, 100, 100,"%")
+  params:add_number("time_probability1", "1: time mod probability", 0, 100, 0, "%")
+  params:add_number("level_probability1", "1: level mod probability", 0, 100, 0, "%")
+  params:add_number("curve_probability1", "1: curve mod probability", 0, 100, 0, "%")
+  params:add_number("time_modulation1", "1: time modulation", 0, params:get("plow1_max_time"), 0)
+  params:add_number("level_modulation1", "1: level modulation", 0, params:get("plow1_max_level"), 0)
+  params:add_number("curve_modulation1", "1: curve modulation", 0, 5, 0)
 
   params:add_number("env_nav_active_control1", "1: env mod nav", 1, #env_mod_param_labels)
   params:set_action("env_nav_active_control1", function(x) 
@@ -826,13 +824,13 @@ params:add_group("just friends",2)
     end
   end )
 
-  params:add_number("randomize_env_probability2", "2: env probability", 0, 100, 100, 0, "%")
-  params:add_number("time_probability2", "2: time probability", 0, 100, 0, 0, "%")
-  params:add_number("level_probability2", "2: level probability", 0, 100, 0, 0, "%")
-  params:add_number("curve_probability2", "2: curve probability", 0, 100, 0, 0, "%")
-  params:add_number("time_modulation2", "2: time modulation", 0, params:get("plow1_max_time") * 0.1, 0, 0, "")
-  params:add_number("level_modulation2", "2: level modulation", 0, params:get("plow1_max_level"), 0, 0, "")
-  params:add_number("curve_modulation2", "2: curve modulation", 0, 5, 0, 0, "")
+  params:add_number("randomize_env_probability2", "2: env probability", 0, 100, 100,"%")
+  params:add_number("time_probability2", "2: time probability", 0, 100, 0, "%")
+  params:add_number("level_probability2", "2: level probability", 0, 100, 0, "%")
+  params:add_number("curve_probability2", "2: curve probability", 0, 100, 0, "%")
+  params:add_number("time_modulation2", "2: time modulation", 0, params:get("plow1_max_time") * 0.1, 0)
+  params:add_number("level_modulation2", "2: level modulation", 0, params:get("plow1_max_level"), 0)
+  params:add_number("curve_modulation2", "2: curve modulation", 0, 5, 0)
   
   params:add_number("env_nav_active_control2", "2: env mod nav", 1, #env_mod_param_labels)
   params:set_action("env_nav_active_control2", function(x) 

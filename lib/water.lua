@@ -238,7 +238,7 @@ water.get_control_label = function ()
         nfo .. 
         ")] "
         -- .. "* " .. tempo_scalar_offset
-        ..note_frequency_fraction_label
+        -- ..note_frequency_fraction_label
         
     label = label .. note_frequency_label
     menu_index = note_frequency_menu_index

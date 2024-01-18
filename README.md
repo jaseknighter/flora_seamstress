@@ -129,8 +129,8 @@ Keyboard commands
 | ondance             | adjust melody relative to plant melody <br> format: `ondance`                                      |
 | estart             | start envelope morphing <br> format: `estart`                                      |
 | estop             | stop envelope morphing <br> format: `estop`                                      |
-| edu              | set the recommendation morphing duration (in beats) <br>recommended range: 0.125 - 50 <br> format: `edu=s{1,10}`  |
-| est              | set the number of steps to complete the morph (each step generates an envelope) <br>recommended range: 1 - 50 <br> format: `est=s{3,20}`  |
+<!-- | edu              | set the recommendation morphing duration (in beats) <br>recommended range: 0.125 - 50 <br> format: `edu=s{1,10}`  |
+| est              | set the number of steps to complete the morph (each step generates an envelope) <br>recommended range: 1 - 50 <br> format: `est=s{3,20}`  | -->
 
 Important note: when setting the rhythm (`rhy`), nested sequins will throw an error (e.g. `rhy=s{1,s{0.5,0.25}}`).
 

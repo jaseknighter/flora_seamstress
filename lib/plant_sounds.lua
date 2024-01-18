@@ -49,7 +49,6 @@ function plant_sounds:new(parent)
 
   ps.engine_tin_note_on = function(note_to_play, velo)
     if params:get("output_bandsaw")==2 or params:get("output_bandsaw")==3 then
-      local freq = MusicUtil.note_num_to_freq(note_to_play)
       local tin_env = params:get("tin_env")
       if tin_env == 1 then
         -- engine.set_env_levels(0,velo,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)

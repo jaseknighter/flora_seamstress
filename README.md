@@ -12,7 +12,7 @@ Aside from the user interface, the main difference between the seamstress and no
 
 ## UI
 
-Flora for seamstress more or less folows the norns UI langugae for navigation. norns encoders and keys are translated into keyboard presses and combinations. 
+Flora for seamstress more or less folows the norns UI language for navigation. norns encoders and keys are translated into keyboard presses and combinations. 
 
 ![](images/norns_ui_graphic.png)
 
